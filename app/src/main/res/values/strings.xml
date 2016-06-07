@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Glam</string>
+    <string name="title_activity_explore">Explore</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+</resources>
