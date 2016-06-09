@@ -31,7 +31,11 @@
         <activity
             android:name=".ExploreScreen"
             android:label="@string/title_activity_explore"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ProductDetailScreen"
+                  android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>

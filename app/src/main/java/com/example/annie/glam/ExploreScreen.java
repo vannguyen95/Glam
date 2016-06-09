@@ -1,6 +1,5 @@
 package com.example.annie.glam;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -24,8 +23,7 @@ public class ExploreScreen extends AppCompatActivity
         setContentView(R.layout.activity_explore);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final ActionBar actionBar = getActionBar();
-        // Specify that tabs should be displayed in the action bar.
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -64,6 +62,7 @@ public class ExploreScreen extends AppCompatActivity
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
 
+
     }
 
 
@@ -79,8 +78,8 @@ public class ExploreScreen extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
+        // Inflate the actionbar_explore_menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.actionbar_explore_menu, menu);
         return true;
     }
 

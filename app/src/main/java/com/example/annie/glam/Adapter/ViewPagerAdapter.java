@@ -4,11 +4,8 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.view.ViewGroup;
 
 import com.example.annie.glam.Fragment.MenFragment;
-import com.example.annie.glam.R;
 
 /**
  * Created by SONY on 6/7/2016.
@@ -29,13 +26,5 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         return 5;
     }
 
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, newFragment);
-        // removes the existing fragment calling onDestroy
-        ft.replace(R.id.flContainer, fragmentA);
-        ft.commit();
-        return super.instantiateItem(container, position);
-    }
+
 }
