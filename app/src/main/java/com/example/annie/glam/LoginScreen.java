@@ -14,7 +14,8 @@ public class LoginScreen extends AppCompatActivity {
     RelativeLayout relativeLayout;
     ImageView imageViewlogoIcon;
     Button buttonLogin;
-    Button buttonCreateAccount;
+    Button btn_register;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,18 +25,24 @@ public class LoginScreen extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(LoginScreen.this,SigninScreen.class);
+                Intent intent = new Intent(LoginScreen.this, SigninScreen.class);
                 startActivity(intent);
             }
         });
     }
 
-    private void onMap()
-    {
-        relativeLayout=(RelativeLayout)findViewById(R.id.layout_login);
-        imageViewlogoIcon=(ImageView)findViewById(R.id.image_view_login_glam_logo);
-        buttonLogin=(Button)findViewById(R.id.button_sign_in);
-        buttonCreateAccount=(Button)findViewById(R.id.button_create_account);
+    private void onMap() {
+        relativeLayout = (RelativeLayout) findViewById(R.id.layout_login);
+        imageViewlogoIcon = (ImageView) findViewById(R.id.image_view_login_glam_logo);
+        buttonLogin = (Button) findViewById(R.id.button_sign_in);
+        btn_register = (Button) findViewById(R.id.button_create_account);
+        btn_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginScreen.this, Activity_Register.class);
+                startActivity(intent);
+            }
+        });
 
 
     }

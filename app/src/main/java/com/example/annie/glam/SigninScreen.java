@@ -109,7 +109,7 @@ public class SigninScreen extends AppCompatActivity {
         userData = parseDataJSON.Logine(output);
 
         if (userData.getEmail() != "") {
-            Toast.makeText(this, "Ok bb", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(SigninScreen.this, Explore.class);
             startActivity(intent);
         } else {
