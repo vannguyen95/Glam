@@ -68,7 +68,7 @@ public class SigninScreen extends AppCompatActivity {
         sigInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(SigninScreen.this,Explore.class);
+                Intent intent= new Intent(SigninScreen.this,ProductDetailScreen.class);
                 startActivity(intent);
             }
         });
