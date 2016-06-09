@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SplashScreen"
+            android:name=".Activities.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Glam">
             <intent-filter>
@@ -21,15 +21,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginScreen"
+            android:name=".Activities.LogInActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Glam.Login" />
         <activity
-            android:name=".SigninScreen"
+            android:name=".Activities.SignInActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Glam.Signin" />
         <activity
-            android:name=".Explore"
+            android:name=".Activities.ExploreActivity"
             android:label="@string/title_activity_explore"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
