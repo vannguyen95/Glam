@@ -8,27 +8,44 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.annie.glam.Adapter.ImageSliderAdapter;
+import com.example.annie.glam.Model.User;
 import com.example.annie.glam.ViewPager.CirclePageIndicator;
 import com.example.annie.glam.ViewPager.PageIndicator;
+import com.example.annie.glam.json.DownLoadDataJSON;
+import com.example.annie.glam.json.ParseDataJSON;
 
 public class SigninScreen extends AppCompatActivity {
+
     private ViewPager mViewPager;
     PageIndicator mIndicator;
-    int [] imageList= new int[]{R.drawable.slider3,R.drawable.slider2,R.drawable.slider};
+    int[] imageList = new int[]{R.drawable.slider3, R.drawable.slider2, R.drawable.slider};
     private static final long ANIM_VIEWPAGER_DELAY = 5000;
     private static final long ANIM_VIEWPAGER_DELAY_USER_VIEW = 10000;
     private Runnable animateViewPager;
     private Handler handler;
     boolean stopSliding = false;
     Button sigInButton;
+    EditText edEmail, edPass;
+    ProgressBar progress_loading;
+    String url = "http://annieandroid.somee.com/api/Tmdt?_email=";
+    User userData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin_screen);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
+
+        edEmail = (EditText) findViewById(R.id.edit_text_email);
+        edPass = (EditText) findViewById(R.id.edit_text_password);
+
+        progress_loading = (ProgressBar) findViewById(R.id.progress_loading);
 
         mIndicator.setOnPageChangeListener(new PageChangeListener());
         mViewPager.setOnPageChangeListener(new PageChangeListener());
@@ -44,11 +61,11 @@ public class SigninScreen extends AppCompatActivity {
                     case MotionEvent.ACTION_UP:
                         // calls when touch release on ViewPager
                     {
-                            stopSliding = false;
-                            handler.postDelayed(animateViewPager,
-                                    ANIM_VIEWPAGER_DELAY_USER_VIEW);
+                        stopSliding = false;
+                        handler.postDelayed(animateViewPager,
+                                ANIM_VIEWPAGER_DELAY_USER_VIEW);
                         break;
-                     }
+                    }
 
 
                     case MotionEvent.ACTION_MOVE:
@@ -64,15 +81,43 @@ public class SigninScreen extends AppCompatActivity {
 
             }
         });
-        sigInButton=(Button)findViewById(R.id.button_sign_in_2);
+        sigInButton = (Button) findViewById(R.id.button_sign_in_2);
         sigInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(SigninScreen.this,Explore.class);
-                startActivity(intent);
+
+                // Kiểm tra dữ liệu người dùng nhập vào
+                if (edEmail.getText().toString().length() == 0 || edPass.getText().toString().length() == 0) {
+                    Toast.makeText(getApplication(), "Vui lòng nhâp đầy đủ thông tin", Toast.LENGTH_LONG).show();
+                } else {
+                    progress_loading.setVisibility(View.VISIBLE);
+                    DownLoadDataJSON dataJSON = new DownLoadDataJSON(new DownLoadDataJSON.AsyncResponse() {
+                        @Override
+                        public void processFinish(String output) {
+                            loadDataUser(output);
+                        }
+                    });
+                    dataJSON.execute(url + edEmail.getText() + "&_passWord=" + edPass.getText());
+                }
             }
         });
     }
+
+    // xử lý đăng nhập
+    private void loadDataUser(String output) {
+        ParseDataJSON parseDataJSON = new ParseDataJSON();
+        userData = parseDataJSON.Logine(output);
+
+        if (userData.getEmail() != "") {
+            Toast.makeText(this, "Ok bb", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(SigninScreen.this, Explore.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Tài khoản hoạc mật khẩu không chính xác", Toast.LENGTH_LONG).show();
+        }
+        progress_loading.setVisibility(View.GONE);
+    }
+
 
     private class PageChangeListener implements ViewPager.OnPageChangeListener {
         @Override
@@ -90,6 +135,7 @@ public class SigninScreen extends AppCompatActivity {
 
         }
     }
+
     public void runnable(final int size) {
         handler = new Handler();
         animateViewPager = new Runnable() {
@@ -110,12 +156,12 @@ public class SigninScreen extends AppCompatActivity {
     @Override
     public void onResume() {
 
-            mViewPager.setAdapter(new ImageSliderAdapter(this,imageList));
+        mViewPager.setAdapter(new ImageSliderAdapter(this, imageList));
 
-            mIndicator.setViewPager(mViewPager);
-            runnable(10);
-            //Re-run callback
-            handler.postDelayed(animateViewPager, ANIM_VIEWPAGER_DELAY);
+        mIndicator.setViewPager(mViewPager);
+        runnable(10);
+        //Re-run callback
+        handler.postDelayed(animateViewPager, ANIM_VIEWPAGER_DELAY);
 
         super.onResume();
     }
