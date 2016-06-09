@@ -8,11 +8,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.annie.glam.Adapter.ImageSliderAdapter;
 import com.example.annie.glam.R;
+import com.example.annie.glam.Model.User;
 import com.example.annie.glam.ViewPager.CirclePageIndicator;
 import com.example.annie.glam.ViewPager.PageIndicator;
+import com.example.annie.glam.json.DownLoadDataJSON;
+import com.example.annie.glam.json.ParseDataJSON;
+
 
 public class SignInActivity extends AppCompatActivity {
     private static final long ANIM_VIEWPAGER_DELAY = 5000;
@@ -24,6 +31,9 @@ public class SignInActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private Runnable animateViewPager;
     private Handler handler;
+    EditText edEmail,edPass;
+    ProgressBar progress_loading;
+    User userData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +41,11 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signin_screen);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
+
+        edEmail = (EditText) findViewById(R.id.edit_text_email);
+        edPass = (EditText) findViewById(R.id.edit_text_password);
+
+        progress_loading = (ProgressBar) findViewById(R.id.progress_loading);
 
         mIndicator.setOnPageChangeListener(new PageChangeListener());
         mViewPager.setOnPageChangeListener(new PageChangeListener());
@@ -74,6 +89,39 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    // xử lý đăng nhập
+    private void loadDataUser(String output) {
+        ParseDataJSON parseDataJSON = new ParseDataJSON();
+        userData = parseDataJSON.Logine(output);
+
+        if (userData.getEmail() != "") {
+            Toast.makeText(this, "Ok bb", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(SignInActivity.this, ExploreActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Tài khoản hoạc mật khẩu không chính xác", Toast.LENGTH_LONG).show();
+        }
+        progress_loading.setVisibility(View.GONE);
+    }
+
+
+    private class PageChangeListener implements ViewPager.OnPageChangeListener {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
     }
 
     public void runnable(final int size) {
