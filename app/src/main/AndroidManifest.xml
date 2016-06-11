@@ -22,16 +22,16 @@
         </activity>
         <activity
             android:name=".Activities.LogInActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Glam.Login" />
         <activity
             android:name=".Activities.SignInActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Glam.Signin" />
         <activity
             android:name=".Activities.ExploreActivity"
             android:label="@string/title_activity_explore"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>

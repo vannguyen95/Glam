@@ -13,7 +13,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.example.annie.glam.Adapter.SpinnerAdapter;
 import com.example.annie.glam.Fragments.FragmentCart;
 import com.example.annie.glam.Fragments.FragmentExplore;
 import com.example.annie.glam.Fragments.FragmentFavorite;
@@ -21,14 +25,19 @@ import com.example.annie.glam.Fragments.FragmentLogOut;
 import com.example.annie.glam.Fragments.FragmentSetting;
 import com.example.annie.glam.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ExploreActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     ActionBar actionBar;
     NavigationView navigationView;
     FragmentManager fragmentManager;
+    Spinner spinner;
+    SpinnerAdapter spinnerAdapter;
 
 
     @Override
@@ -47,32 +56,32 @@ public class ExploreActivity extends AppCompatActivity
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        spinner = (Spinner) findViewById(R.id.spinner_nav);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        ArrayList<String> list = new ArrayList<String>();
+        list.add("Popular");
+        list.add("Latest");
+        list.add("Discount");
+        list.add("On Sale");
+        list.add("Upcoming");
+
+        spinnerAdapter = new SpinnerAdapter(getApplicationContext(),list);
+        spinner.setAdapter(spinnerAdapter);
 
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.syncState();
 
-
-//        drawerLayout.setDrawerListener(toggle);
-
-
         toolbar.setNavigationOnClickListener(this);
         navigationView.setNavigationItemSelectedListener(this);
+        spinner.setOnItemSelectedListener(this);
 
     }
-
-//    @Override
-//    public void onBackPressed() {
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        if (drawer.isDrawerOpen(GravityCompat.START)) {
-//            drawer.closeDrawer(GravityCompat.START);
-//        } else {
-//            super.onBackPressed();
-//        }
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -96,7 +105,6 @@ public class ExploreActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -154,4 +162,17 @@ public class ExploreActivity extends AppCompatActivity
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String item = parent.getItemAtPosition(position).toString();
+
+        // Showing selected spinner item
+        Toast.makeText(getApplicationContext(), "Selected  : " + item,
+                Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }
