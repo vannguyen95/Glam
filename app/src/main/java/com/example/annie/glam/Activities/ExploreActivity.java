@@ -1,5 +1,6 @@
 package com.example.annie.glam.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -15,12 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.annie.glam.Adapter.SpinnerAdapter;
 import com.example.annie.glam.Fragments.FragmentCart;
 import com.example.annie.glam.Fragments.FragmentExplore;
 import com.example.annie.glam.Fragments.FragmentFavorite;
+import com.example.annie.glam.Fragments.FragmentLogIn;
 import com.example.annie.glam.Fragments.FragmentLogOut;
 import com.example.annie.glam.Fragments.FragmentSetting;
 import com.example.annie.glam.R;
@@ -38,6 +41,7 @@ public class ExploreActivity extends AppCompatActivity
     FragmentManager fragmentManager;
     Spinner spinner;
     SpinnerAdapter spinnerAdapter;
+    TextView tvEmail;
 
 
     @Override
@@ -54,6 +58,11 @@ public class ExploreActivity extends AppCompatActivity
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
+        View header = navigationView.getHeaderView(0);
+        tvEmail = (TextView) header.findViewById(R.id.tv_email);
+
+        Intent intent = getIntent();
+        tvEmail.setText(intent.getExtras().getString("email"));
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         spinner = (Spinner) findViewById(R.id.spinner_nav);
@@ -144,11 +153,20 @@ public class ExploreActivity extends AppCompatActivity
                 drawerLayout.closeDrawer(GravityCompat.START);
                 break;
 
-            case R.id.nav_logout:
+            case R.id.nav_login:
                 FragmentTransaction fragmentTransaction4 = fragmentManager.beginTransaction();
-                FragmentLogOut fragmentLogOut = new FragmentLogOut();
-                fragmentTransaction4.replace(R.id.content_layout, fragmentLogOut);
+                FragmentLogIn fragmentLogIn = new FragmentLogIn();
+                fragmentTransaction4.replace(R.id.content_layout, fragmentLogIn);
                 fragmentTransaction4.commit();
+                drawerLayout.closeDrawer(GravityCompat.START);
+                getSupportActionBar().hide();
+                break;
+
+            case R.id.nav_logout:
+                FragmentTransaction fragmentTransaction5 = fragmentManager.beginTransaction();
+                FragmentLogOut fragmentLogOut = new FragmentLogOut();
+                fragmentTransaction5.replace(R.id.content_layout, fragmentLogOut);
+                fragmentTransaction5.commit();
                 drawerLayout.closeDrawer(GravityCompat.START);
                 break;
         }
@@ -167,8 +185,8 @@ public class ExploreActivity extends AppCompatActivity
         String item = parent.getItemAtPosition(position).toString();
 
         // Showing selected spinner item
-        Toast.makeText(getApplicationContext(), "Selected  : " + item,
-                Toast.LENGTH_LONG).show();
+//        Toast.makeText(getApplicationContext(), "Selected  : " + item,
+//                Toast.LENGTH_LONG).show();
     }
 
     @Override

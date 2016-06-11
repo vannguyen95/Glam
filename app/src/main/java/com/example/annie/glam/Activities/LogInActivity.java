@@ -11,33 +11,44 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.Glide;
 import com.example.annie.glam.R;
 
-public class LogInActivity extends AppCompatActivity {
+public class LogInActivity extends AppCompatActivity implements View.OnClickListener {
     RelativeLayout relativeLayout;
-    ImageView imageViewlogoIcon;
-    Button buttonLogin;
-    Button buttonCreateAccount;
+    ImageView imvlogoIcon;
+    Button btnLogin;
+    Button btnCreateAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
+
         onMap();
-        Glide.with(this).load(R.drawable.glamlogo).into(imageViewlogoIcon);
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LogInActivity.this, SignInActivity.class);
-                startActivity(intent);
-            }
-        });
+
+        Glide.with(this).load(R.drawable.glamlogo).into(imvlogoIcon);
+
+        btnLogin.setOnClickListener(this);
+        btnCreateAccount.setOnClickListener(this);
     }
 
     private void onMap() {
         relativeLayout = (RelativeLayout) findViewById(R.id.layout_login);
-        imageViewlogoIcon = (ImageView) findViewById(R.id.image_view_login_glam_logo);
-        buttonLogin = (Button) findViewById(R.id.button_sign_in);
-        buttonCreateAccount = (Button) findViewById(R.id.button_create_account);
+        imvlogoIcon = (ImageView) findViewById(R.id.imv_login_glam_logo);
+        btnLogin = (Button) findViewById(R.id.btn_sign_in);
+        btnCreateAccount = (Button) findViewById(R.id.btn_create_account);
+    }
 
-
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_sign_in:
+                Intent intent = new Intent(LogInActivity.this,SignInActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_create_account:
+                Intent intent1 = new Intent(LogInActivity.this,RegisterActivity.class);
+                startActivity(intent1);
+                break;
+        }
     }
 }
+
