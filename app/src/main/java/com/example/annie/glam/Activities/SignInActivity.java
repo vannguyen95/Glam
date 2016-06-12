@@ -35,7 +35,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private Runnable animateViewPager;
     private Handler handler;
     EditText edEmail,edPass;
-    Button sigInButton;
+    Button btnSignIn,btnFacebook;
     TextView tvForgetPass,tvNewHere;
     Firebase root;
 
@@ -48,7 +48,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         edEmail = (EditText) findViewById(R.id.edit_text_email);
         edPass = (EditText) findViewById(R.id.edit_text_password);
-        sigInButton = (Button) findViewById(R.id.button_sign_in_2);
+        btnSignIn = (Button) findViewById(R.id.button_sign_in_2);
+        btnFacebook = (Button) findViewById(R.id.btn_facebook);
         tvForgetPass = (TextView) findViewById(R.id.tv_forget_pass);
         tvNewHere = (TextView) findViewById(R.id.tv_new_here);
 
@@ -90,7 +91,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        sigInButton.setOnClickListener(this);
+        btnSignIn.setOnClickListener(this);
+        btnFacebook.setOnClickListener(this);
         tvForgetPass.setOnClickListener(this);
         tvNewHere.setOnClickListener(this);
     }
@@ -112,6 +114,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                         Toast.makeText(getApplicationContext(),firebaseError.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 });
+                break;
+            case R.id.btn_facebook:
                 break;
             case R.id.tv_forget_pass:
                 break;

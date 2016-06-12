@@ -2,9 +2,15 @@ package com.example.annie.glam.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,35 +29,27 @@ import retrofit2.Callback;
  */
 public class FragmentSetting extends Fragment {
 
-    RecyclerView recyclerView;
-    RecyclerView.Adapter recyclerViewAdapter;
-    RecyclerView.LayoutManager recyclerViewLayoutManager;
+    Toolbar toolbar;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_setting,container,false);
-        recyclerView = (RecyclerView) v.findViewById(R.id.recyler_view_category_list);
 
-        recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(recyclerViewLayoutManager);
-        //GetData
-        WooCommerceService service = ServiceGenerator.createService(WooCommerceService.class);
-        Call<CategoryResponse> categoryResponseCall = service.getListCategory();
-        categoryResponseCall.enqueue(new Callback<CategoryResponse>() {
-            @Override
-            public void onResponse(Call<CategoryResponse> call, retrofit2.Response<CategoryResponse> response) {
-                CategoryResponse categoryResponse = response.body();
+        toolbar = (Toolbar) v.findViewById(R.id.toolbar_setting);
+        toolbar.setTitle("Setting");
 
-                recyclerViewAdapter = new CategoryListAdapter(getActivity(), categoryResponse.getProductCategories());
-                recyclerView.setAdapter(recyclerViewAdapter);
-            }
+//        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+//        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-            @Override
-            public void onFailure(Call<CategoryResponse> call, Throwable t) {
-            }
-        });
+//        and if you want to add items to the toolbar within MyFragment you must add this line inside onCreateView function
+//        we identify them in menu/fragment_menu.xml
+//        after that override,onCreateOptionsMenu,onOptionsItemSelected
+//        setHasOptionsMenu(false);
+
         return v;
     }
+
+
 }

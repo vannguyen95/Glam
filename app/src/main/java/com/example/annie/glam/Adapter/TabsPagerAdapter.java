@@ -11,7 +11,6 @@ import com.example.annie.glam.Fragments.PageFragment;
  */
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
-
     public TabsPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -19,16 +18,25 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
+
         return PageFragment.newInstance(position + 1);
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 5;
     }
 
     @Override
-    public CharSequence getPageTitle(int position) {
-        return "TAB " + (position + 1);
+    public String getPageTitle(int position) {
+//        return "TAB " + (position + 1);
+        switch (position){
+            case 0:return "Men";
+            case 1:return "Women";
+            case 2:return "Kid";
+            case 3:return "Traditional";
+            case 4:return "Special";
+        }
+        return null;
     }
 }

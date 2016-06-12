@@ -3,6 +3,7 @@ package com.example.annie.glam.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -31,8 +32,7 @@ import com.example.annie.glam.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExploreActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class ExploreActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
     Toolbar toolbar;
     DrawerLayout drawerLayout;
@@ -62,7 +62,7 @@ public class ExploreActivity extends AppCompatActivity
         tvEmail = (TextView) header.findViewById(R.id.tv_email);
 
         Intent intent = getIntent();
-        tvEmail.setText(intent.getExtras().getString("email"));
+//        tvEmail.setText(intent.getExtras().getString("email"));
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         spinner = (Spinner) findViewById(R.id.spinner_nav);
@@ -127,30 +127,37 @@ public class ExploreActivity extends AppCompatActivity
                 fragmentTransaction.replace(R.id.content_layout, fragmentExplore);
                 fragmentTransaction.commit();
                 drawerLayout.closeDrawer(GravityCompat.START);
+                getSupportActionBar().show();
                 break;
 
             case R.id.nav_favorite:
                 FragmentTransaction fragmentTransaction1 = fragmentManager.beginTransaction();
                 FragmentFavorite fragmentFavorite = new FragmentFavorite();
                 fragmentTransaction1.replace(R.id.content_layout, fragmentFavorite);
+                fragmentTransaction1.addToBackStack("fragBack");
                 fragmentTransaction1.commit();
                 drawerLayout.closeDrawer(GravityCompat.START);
+                getSupportActionBar().hide();
                 break;
 
             case R.id.nav_cart:
                 FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
                 FragmentCart fragmentCart = new FragmentCart();
                 fragmentTransaction2.replace(R.id.content_layout, fragmentCart);
+                fragmentTransaction2.addToBackStack("fragBack");
                 fragmentTransaction2.commit();
                 drawerLayout.closeDrawer(GravityCompat.START);
+                getSupportActionBar().hide();
                 break;
 
             case R.id.nav_setting:
                 FragmentTransaction fragmentTransaction3 = fragmentManager.beginTransaction();
                 FragmentSetting fragmentSetting = new FragmentSetting();
                 fragmentTransaction3.replace(R.id.content_layout, fragmentSetting);
+                fragmentTransaction3.addToBackStack("fragBack");
                 fragmentTransaction3.commit();
                 drawerLayout.closeDrawer(GravityCompat.START);
+                getSupportActionBar().hide();
                 break;
 
             case R.id.nav_login:
@@ -179,7 +186,6 @@ public class ExploreActivity extends AppCompatActivity
         drawerLayout.openDrawer(GravityCompat.START);
     }
 
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String item = parent.getItemAtPosition(position).toString();
@@ -190,7 +196,26 @@ public class ExploreActivity extends AppCompatActivity
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onNothingSelected(AdapterView<?> parent) {}
 
-    }
+    @Override
+    public void onBackPressed() {
+
+            if (getSupportFragmentManager().findFragmentByTag("fragBack") != null) {
+
+            }
+            else {
+                super.onBackPressed();
+                getSupportActionBar().show();
+                return;
+            }
+            if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+                Fragment frag = getSupportFragmentManager().findFragmentByTag("fragBack");
+                FragmentTransaction transac = getSupportFragmentManager().beginTransaction().remove(frag);
+                transac.commit();
+
+            }
+
+        }
+
 }

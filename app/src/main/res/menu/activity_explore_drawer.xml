@@ -8,7 +8,7 @@
         <item
             android:id="@+id/nav_favorite"
             android:icon="@drawable/ic_favorable"
-            android:title="Favorite" />
+            android:title="Favorie" />
         <item
             android:id="@+id/nav_cart"
             android:icon="@drawable/ic_cart"
