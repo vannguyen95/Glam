@@ -59,8 +59,8 @@ public class PageFragment extends Fragment {
             case 1:
                 //GetData
 
-                Call<ProductsResponse> categoryResponseCall = service.getListProductByCatName("clothing");
-                categoryResponseCall.enqueue(new Callback<ProductsResponse>() {
+                Call<ProductsResponse> postersResponseCall = service.getListProductByCatName("Posters");
+                postersResponseCall.enqueue(new Callback<ProductsResponse>() {
                     @Override
                     public void onResponse(Call<ProductsResponse> call, retrofit2.Response<ProductsResponse> response) {
                         ProductsResponse categoryResponse = response.body();
@@ -75,12 +75,68 @@ public class PageFragment extends Fragment {
                 });
                 break;
             case 2:
+                Call<ProductsResponse> albumsResponseCall = service.getListProductByCatName("Albums");
+                albumsResponseCall.enqueue(new Callback<ProductsResponse>() {
+                    @Override
+                    public void onResponse(Call<ProductsResponse> call, retrofit2.Response<ProductsResponse> response) {
+                        ProductsResponse categoryResponse = response.body();
+
+                        recyclerViewAdapter = new CategoryListAdapter(getActivity(), categoryResponse.getProducts());
+                        recyclerView.setAdapter(recyclerViewAdapter);
+                    }
+
+                    @Override
+                    public void onFailure(Call<ProductsResponse> call, Throwable t) {
+                    }
+                });
                 break;
             case 3:
+                Call<ProductsResponse> singlesResponseCall = service.getListProductByCatName("Singles");
+                singlesResponseCall.enqueue(new Callback<ProductsResponse>() {
+                    @Override
+                    public void onResponse(Call<ProductsResponse> call, retrofit2.Response<ProductsResponse> response) {
+                        ProductsResponse categoryResponse = response.body();
+
+                        recyclerViewAdapter = new CategoryListAdapter(getActivity(), categoryResponse.getProducts());
+                        recyclerView.setAdapter(recyclerViewAdapter);
+                    }
+
+                    @Override
+                    public void onFailure(Call<ProductsResponse> call, Throwable t) {
+                    }
+                });
                 break;
             case 4:
+                Call<ProductsResponse> hoodiesResponseCall = service.getListProductByCatName("Hoodies");
+                hoodiesResponseCall.enqueue(new Callback<ProductsResponse>() {
+                    @Override
+                    public void onResponse(Call<ProductsResponse> call, retrofit2.Response<ProductsResponse> response) {
+                        ProductsResponse categoryResponse = response.body();
+
+                        recyclerViewAdapter = new CategoryListAdapter(getActivity(), categoryResponse.getProducts());
+                        recyclerView.setAdapter(recyclerViewAdapter);
+                    }
+
+                    @Override
+                    public void onFailure(Call<ProductsResponse> call, Throwable t) {
+                    }
+                });
                 break;
             case 5:
+                Call<ProductsResponse> tshirtsResponseCall = service.getListProductByCatName("T-shirts");
+                tshirtsResponseCall.enqueue(new Callback<ProductsResponse>() {
+                    @Override
+                    public void onResponse(Call<ProductsResponse> call, retrofit2.Response<ProductsResponse> response) {
+                        ProductsResponse categoryResponse = response.body();
+
+                        recyclerViewAdapter = new CategoryListAdapter(getActivity(), categoryResponse.getProducts());
+                        recyclerView.setAdapter(recyclerViewAdapter);
+                    }
+
+                    @Override
+                    public void onFailure(Call<ProductsResponse> call, Throwable t) {
+                    }
+                });
                 break;
         }
         return v;

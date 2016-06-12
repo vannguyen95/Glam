@@ -45,9 +45,7 @@ public class CategoryListAdapter extends android.support.v7.widget.RecyclerView.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         ((ViewHolder) holder).tv1.setText(mDataset.get(position).getTitle());
-        ((ViewHolder) holder).tv2.setText(mDataset.get(position).getDescription());
-//        ((ViewHolder) holder).tv3.setText(" ( " + (mDataset.get(position).getCount()).toString() + " )");
-        Glide.with(context).load(mDataset.get(position).getFeaturedSrc()).into(((ViewHolder) holder).img);
+        Glide.with(context).load(mDataset.get(position).getFeaturedSrc()).fitCenter().into(((ViewHolder) holder).img);
 //        ((ViewHolder) holder).cardView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -65,15 +63,13 @@ public class CategoryListAdapter extends android.support.v7.widget.RecyclerView.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tv1, tv2, tv3;
+        public TextView tv1;
         public ImageView img;
         public CardView cardView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             tv1 = (TextView) itemView.findViewById(R.id.text_view_category_name);
-            tv2 = (TextView) itemView.findViewById(R.id.text_view_description);
-            tv3 = (TextView) itemView.findViewById(R.id.text_view_category_count);
             img = (ImageView) itemView.findViewById(R.id.imv_category);
             cardView = (CardView) itemView.findViewById(R.id.card_view);
         }

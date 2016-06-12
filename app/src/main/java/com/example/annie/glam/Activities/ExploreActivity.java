@@ -64,6 +64,7 @@ public class ExploreActivity extends AppCompatActivity implements View.OnClickLi
         Intent intent = getIntent();
 //        tvEmail.setText(intent.getExtras().getString("email"));
 
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         spinner = (Spinner) findViewById(R.id.spinner_nav);
         setSupportActionBar(toolbar);
