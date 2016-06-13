@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,10 +24,18 @@ import com.example.annie.glam.Fragments.FragmentExplore;
 import com.example.annie.glam.Fragments.FragmentFavorite;
 import com.example.annie.glam.Fragments.FragmentLogOut;
 import com.example.annie.glam.Fragments.FragmentSetting;
+import com.example.annie.glam.Models.CategoryResponse;
+import com.example.annie.glam.Models.ProductCategory;
 import com.example.annie.glam.R;
+import com.example.annie.glam.Service.WooCommerceService;
+import com.example.annie.glam.ServiceGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ExploreActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -38,7 +47,13 @@ public class ExploreActivity extends AppCompatActivity
     FragmentManager fragmentManager;
     Spinner spinner;
     SpinnerAdapter spinnerAdapter;
+    List<ProductCategory>productCategoriesList;
 
+    List<ProductCategory> categoryParent = new ArrayList<>();
+    List<ProductCategory> categoryChild = new ArrayList<>();
+    List<ProductCategory>getCategoryChild=new ArrayList<>();
+    List<String>categoryParentTitle= new ArrayList<>();
+    List<String>categoryChildTitle= new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +75,34 @@ public class ExploreActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        ArrayList<String> list = new ArrayList<String>();
+        //original
+
+        //add parent into spinner
+       /* GetCatgories();
+        spinnerAdapter= new SpinnerAdapter(getApplicationContext(),categoryParentTitle);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String title=spinner.getSelectedItem().toString();
+                ProductCategory productCategory=null;
+                for (int i =0;i<categoryParent.size();i++)
+                    if (categoryParent.get(i).getName().equals(title))
+                        productCategory=categoryParent.get(i);
+
+                List<ProductCategory> productCategoriesChild = new ArrayList<>();
+                for (int y=0;y<categoryChild.size();y++)
+                    if (categoryChild.get(y).getParent()==productCategory.getId()) {
+
+                        productCategoriesChild.add(categoryChild.get(y));
+
+                    }
+            getCategoryChild=productCategoriesChild;
+        }});
+       */
+
+
+         ArrayList<String> list = new ArrayList<String>();
         list.add("Popular");
         list.add("Latest");
         list.add("Discount");
@@ -69,8 +111,6 @@ public class ExploreActivity extends AppCompatActivity
 
         spinnerAdapter = new SpinnerAdapter(getApplicationContext(),list);
         spinner.setAdapter(spinnerAdapter);
-
-
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -82,6 +122,11 @@ public class ExploreActivity extends AppCompatActivity
         spinner.setOnItemSelectedListener(this);
 
     }
+
+    public List<ProductCategory> getChildCategory() {
+        return getCategoryChild;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -175,4 +220,43 @@ public class ExploreActivity extends AppCompatActivity
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+    public void GetCatgories()
+    {
+        WooCommerceService wooCommerceService= ServiceGenerator.createService(WooCommerceService.class);
+        Call<CategoryResponse>ListCategoryReponseCall=wooCommerceService.getListCategory();
+        ListCategoryReponseCall.enqueue(new Callback<CategoryResponse>() {
+            @Override
+            public void onResponse(Call<CategoryResponse> call, Response<CategoryResponse> response) {
+                CategoryResponse categoryResponse=response.body();
+                Log.d("Category Size",String.valueOf(categoryResponse.getProductCategories().size()));
+                productCategoriesList=categoryResponse.getProductCategories();
+                classifyProductCategory();
+            }
+
+            @Override
+            public void onFailure(Call<CategoryResponse> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    void classifyProductCategory()
+    {
+        for (int i =0;i<productCategoriesList.size();i++)
+            if (productCategoriesList.get(i).getParent()==0)
+                categoryParent.add(productCategoriesList.get(i));
+            else categoryChild.add(productCategoriesList.get(i));
+        classifyProductCategoryTitle();
+    }
+
+    void classifyProductCategoryTitle()
+    {
+        for (int i=0; i<categoryParent.size();i++)
+            categoryParentTitle.add(categoryParent.get(i).getName());
+        for (int y=0;y<=categoryChild.size();y++)
+            categoryChildTitle.add(categoryChild.get(y).getName());
+    }
+
 }

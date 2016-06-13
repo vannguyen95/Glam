@@ -24,11 +24,17 @@ public class FragmentExplore extends Fragment  {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       View v = inflater.inflate(R.layout.fragment_explore,container,false);
+
+        //ExploreActivity exploreActivity= new ExploreActivity();
+        //List<ProductCategory> categoryChild=exploreActivity.getChildCategory();
+        View v = inflater.inflate(R.layout.fragment_explore,container,false);
 
         tabsPagerAdapter = new TabsPagerAdapter(getFragmentManager());
         viewPager = (ViewPager) v.findViewById(R.id.pager_tab_strip);
         viewPager.setAdapter(tabsPagerAdapter);
+
+       /* Bundle tabTitle=new Bundle();
+        tabTitle.putString("Tab Title",viewPager.);*/
         return v;
     }
 

@@ -6,12 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.annie.glam.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,11 +18,12 @@ import java.util.List;
 public class SpinnerAdapter extends ArrayAdapter<String> {
 
     private Context context1;
-    private ArrayList<String> data;
+   // private ArrayList<String> data;
+    private List<String>categoryTitle;
     public Resources res;
     LayoutInflater inflater;
 
-    public SpinnerAdapter(Context context, ArrayList<String> objects) {
+  /* public SpinnerAdapter(Context context, ArrayList<String> objects) {
         super(context, R.layout.spinner_row, objects);
 
         context1 = context;
@@ -32,7 +31,19 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
 
         inflater = (LayoutInflater) context1.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+    }*/
+
+    public SpinnerAdapter(Context context, List<String> objects) {
+        super(context, R.layout.spinner_row, objects);
+
+        context1 = context;
+        categoryTitle = objects;
+
+        inflater = (LayoutInflater) context1.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
     }
+
+
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
@@ -51,8 +62,8 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
 
         TextView tvCategory = (TextView) row.findViewById(R.id.tv_spinner_row);
 
-        tvCategory.setText(data.get(position).toString());
-
+       // tvCategory.setText(data.get(position).toString());
+        tvCategory.setText(categoryTitle.get(position).toString());
         return row;
     }
 }
