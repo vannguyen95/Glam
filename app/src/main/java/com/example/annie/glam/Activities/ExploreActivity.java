@@ -26,8 +26,13 @@ import com.example.annie.glam.Fragments.FragmentExplore;
 import com.example.annie.glam.Fragments.FragmentFavorite;
 import com.example.annie.glam.Fragments.FragmentLogIn;
 import com.example.annie.glam.Fragments.FragmentLogOut;
+import com.example.annie.glam.Fragments.FragmentSaleOn;
 import com.example.annie.glam.Fragments.FragmentSetting;
 import com.example.annie.glam.R;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +47,15 @@ public class ExploreActivity extends AppCompatActivity implements View.OnClickLi
     Spinner spinner;
     SpinnerAdapter spinnerAdapter;
     TextView tvEmail;
+    Firebase root;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
+        Firebase.setAndroidContext(this);
+        root = new Firebase("https://glam-user.firebaseio.com/");
 
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -61,9 +69,6 @@ public class ExploreActivity extends AppCompatActivity implements View.OnClickLi
         View header = navigationView.getHeaderView(0);
         tvEmail = (TextView) header.findViewById(R.id.tv_email);
 
-        Intent intent = getIntent();
-//        tvEmail.setText(intent.getExtras().getString("email"));
-
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         spinner = (Spinner) findViewById(R.id.spinner_nav);
@@ -74,12 +79,11 @@ public class ExploreActivity extends AppCompatActivity implements View.OnClickLi
         list.add("Popular");
         list.add("Latest");
         list.add("Discount");
-        list.add("On Sale");
+        list.add("OnSale");
         list.add("Upcoming");
 
         spinnerAdapter = new SpinnerAdapter(getApplicationContext(),list);
         spinner.setAdapter(spinnerAdapter);
-
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -91,7 +95,29 @@ public class ExploreActivity extends AppCompatActivity implements View.OnClickLi
         navigationView.setNavigationItemSelectedListener(this);
         spinner.setOnItemSelectedListener(this);
 
+
+        //Get the uid for the currently logged in User from intent data passed to this activity
+        String uid = getIntent().getStringExtra("user_id");
+        if(uid != null){
+            root.child("users").child(uid).child("email").addValueEventListener(new ValueEventListener() {
+                //onDataChange is called every time the name of the User changes in your Firebase Database
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    //Inside onDataChange we can get the data as an Object from the dataSnapshot
+                    //getValue returns an Object. We can specify the type by passing the type expected as a parameter
+                    String data = dataSnapshot.getValue(String.class);
+                    tvEmail.setText(data);
+                }
+                //onCancelled is called in case of any error
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+                    Toast.makeText(getApplicationContext(), "" + firebaseError.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -162,19 +188,23 @@ public class ExploreActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.nav_login:
-                FragmentTransaction fragmentTransaction4 = fragmentManager.beginTransaction();
-                FragmentLogIn fragmentLogIn = new FragmentLogIn();
-                fragmentTransaction4.replace(R.id.content_layout, fragmentLogIn);
-                fragmentTransaction4.commit();
+                Intent intent = new Intent(getApplicationContext(),SignInActivity.class);
+                startActivity(intent);
+//                FragmentTransaction fragmentTransaction4 = fragmentManager.beginTransaction();
+//                FragmentLogIn fragmentLogIn = new FragmentLogIn();
+//                fragmentTransaction4.replace(R.id.content_layout, fragmentLogIn);
+//                fragmentTransaction4.commit();
                 drawerLayout.closeDrawer(GravityCompat.START);
-                getSupportActionBar().hide();
+//                getSupportActionBar().hide();
                 break;
 
             case R.id.nav_logout:
-                FragmentTransaction fragmentTransaction5 = fragmentManager.beginTransaction();
-                FragmentLogOut fragmentLogOut = new FragmentLogOut();
-                fragmentTransaction5.replace(R.id.content_layout, fragmentLogOut);
-                fragmentTransaction5.commit();
+//                FragmentTransaction fragmentTransaction5 = fragmentManager.beginTransaction();
+//                FragmentLogOut fragmentLogOut = new FragmentLogOut();
+//                fragmentTransaction5.replace(R.id.content_layout, fragmentLogOut);
+//                fragmentTransaction5.commit();
+                root.unauth();
+                tvEmail.setText("Email");
                 drawerLayout.closeDrawer(GravityCompat.START);
                 break;
         }
@@ -191,9 +221,17 @@ public class ExploreActivity extends AppCompatActivity implements View.OnClickLi
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String item = parent.getItemAtPosition(position).toString();
 
-        // Showing selected spinner item
-//        Toast.makeText(getApplicationContext(), "Selected  : " + item,
-//                Toast.LENGTH_LONG).show();
+        switch (position){
+            case 3:
+                FragmentTransaction fragmentTransaction4 = fragmentManager.beginTransaction();
+                FragmentSaleOn fragmentSaleOn = new FragmentSaleOn();
+                fragmentTransaction4.replace(R.id.content_layout, fragmentSaleOn);
+                fragmentTransaction4.addToBackStack("fragBack");
+                fragmentTransaction4.commit();
+                getSupportActionBar().hide();
+                break;
+        }
+
     }
 
     @Override

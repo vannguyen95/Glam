@@ -110,7 +110,7 @@ public class FragmentLogIn extends Fragment implements View.OnClickListener {
                     public void onAuthenticated(AuthData authData) {
                         Toast.makeText(getActivity(),"Success",Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity(), ExploreActivity.class);
-                        intent.putExtra("email",edEmail.getText().toString());
+
                         startActivity(intent);
                     }
                     @Override

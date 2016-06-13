@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.annie.glam.Adapter.ImageSliderAdapter;
+import com.example.annie.glam.Models.User;
 import com.example.annie.glam.R;
 import com.example.annie.glam.ViewPager.CirclePageIndicator;
 import com.example.annie.glam.ViewPager.PageIndicator;
@@ -38,6 +39,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     Button btnSignIn,btnFacebook;
     TextView tvForgetPass,tvNewHere;
     Firebase root;
+    private User user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,12 +103,19 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.button_sign_in_2:
-                root.authWithPassword(edEmail.getText().toString(), edPass.getText().toString(), new Firebase.AuthResultHandler() {
+                user = new User();
+                user.setEmail(edEmail.getText().toString());
+                user.setPassword(edPass.getText().toString());
+
+                root.authWithPassword(user.getEmail(), user.getPassword(), new Firebase.AuthResultHandler() {
                     @Override
                     public void onAuthenticated(AuthData authData) {
                         Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(SignInActivity.this, ExploreActivity.class);
+                        String uid = root.getAuth().getUid();
+                        intent.putExtra("user_id",uid);
                         startActivity(intent);
+                        finish();
                     }
                     @Override
                     public void onAuthenticationError(FirebaseError firebaseError) {

@@ -8,7 +8,7 @@
         <item
             android:id="@+id/nav_favorite"
             android:icon="@drawable/ic_favorable"
-            android:title="Favorie" />
+            android:title="Favorite" />
         <item
             android:id="@+id/nav_cart"
             android:icon="@drawable/ic_cart"
@@ -16,7 +16,7 @@
         <item
             android:id="@+id/nav_setting"
             android:icon="@drawable/ic_setting"
-            android:title="Tools" />
+            android:title="Settings" />
 
         <item
             android:id="@+id/nav_login"
