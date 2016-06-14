@@ -24,8 +24,6 @@ import com.example.annie.glam.Adapter.SpinnerAdapter;
 import com.example.annie.glam.Fragments.FragmentCart;
 import com.example.annie.glam.Fragments.FragmentExplore;
 import com.example.annie.glam.Fragments.FragmentFavorite;
-import com.example.annie.glam.Fragments.FragmentLogIn;
-import com.example.annie.glam.Fragments.FragmentLogOut;
 import com.example.annie.glam.Fragments.FragmentSaleOn;
 import com.example.annie.glam.Fragments.FragmentSetting;
 import com.example.annie.glam.R;
@@ -35,7 +33,6 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ExploreActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
@@ -82,7 +79,7 @@ public class ExploreActivity extends AppCompatActivity implements View.OnClickLi
         list.add("OnSale");
         list.add("Upcoming");
 
-        spinnerAdapter = new SpinnerAdapter(getApplicationContext(),list);
+        spinnerAdapter = new SpinnerAdapter(getApplicationContext(), list);
         spinner.setAdapter(spinnerAdapter);
 
         actionBar = getSupportActionBar();
@@ -98,7 +95,7 @@ public class ExploreActivity extends AppCompatActivity implements View.OnClickLi
 
         //Get the uid for the currently logged in User from intent data passed to this activity
         String uid = getIntent().getStringExtra("user_id");
-        if(uid != null){
+        if (uid != null) {
             root.child("users").child(uid).child("email").addValueEventListener(new ValueEventListener() {
                 //onDataChange is called every time the name of the User changes in your Firebase Database
                 @Override
@@ -108,6 +105,7 @@ public class ExploreActivity extends AppCompatActivity implements View.OnClickLi
                     String data = dataSnapshot.getValue(String.class);
                     tvEmail.setText(data);
                 }
+
                 //onCancelled is called in case of any error
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
@@ -188,7 +186,7 @@ public class ExploreActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.nav_login:
-                Intent intent = new Intent(getApplicationContext(),SignInActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                 startActivity(intent);
 //                FragmentTransaction fragmentTransaction4 = fragmentManager.beginTransaction();
 //                FragmentLogIn fragmentLogIn = new FragmentLogIn();
@@ -221,7 +219,7 @@ public class ExploreActivity extends AppCompatActivity implements View.OnClickLi
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String item = parent.getItemAtPosition(position).toString();
 
-        switch (position){
+        switch (position) {
             case 3:
                 FragmentTransaction fragmentTransaction4 = fragmentManager.beginTransaction();
                 FragmentSaleOn fragmentSaleOn = new FragmentSaleOn();
@@ -235,26 +233,26 @@ public class ExploreActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {}
+    public void onNothingSelected(AdapterView<?> parent) {
+    }
 
     @Override
     public void onBackPressed() {
 
-            if (getSupportFragmentManager().findFragmentByTag("fragBack") != null) {
+        if (getSupportFragmentManager().findFragmentByTag("fragBack") != null) {
 
-            }
-            else {
-                super.onBackPressed();
-                getSupportActionBar().show();
-                return;
-            }
-            if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-                Fragment frag = getSupportFragmentManager().findFragmentByTag("fragBack");
-                FragmentTransaction transac = getSupportFragmentManager().beginTransaction().remove(frag);
-                transac.commit();
-
-            }
+        } else {
+            super.onBackPressed();
+            getSupportActionBar().show();
+            return;
+        }
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+            Fragment frag = getSupportFragmentManager().findFragmentByTag("fragBack");
+            FragmentTransaction transac = getSupportFragmentManager().beginTransaction().remove(frag);
+            transac.commit();
 
         }
+
+    }
 
 }
