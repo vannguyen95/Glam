@@ -1,6 +1,8 @@
 package com.example.annie.glam.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.annie.glam.Activities.ProductDetailActivity;
 import com.example.annie.glam.Models.Product;
 import com.example.annie.glam.R;
 
@@ -37,10 +40,19 @@ public class ProductDataAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         Glide.with(context).load(productsList.get(position).getFeaturedSrc()).into(((ViewHolder) holder).productPhoto);
         ((ViewHolder) holder).productName.setText(productsList.get(position).getTitle());
         ((ViewHolder) holder).price.setText(productsList.get(position).getSalePrice()+ " $ ");
+        ((ViewHolder) holder).container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ProductDetailActivity.class);
+                intent.putExtra("ID",productsList.get(position).getId());
+                intent.putExtra("Saleprice",productsList.get(position).getSalePrice());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -53,6 +65,7 @@ public class ProductDataAdapter extends RecyclerView.Adapter {
         public static TextView productName;
         public static TextView price;
         public static Button add;
+        public static CardView container;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -60,7 +73,8 @@ public class ProductDataAdapter extends RecyclerView.Adapter {
             Log.d("productPhotoID",String.valueOf(R.id.iv_product_onsale_cell));
             productName = (TextView) itemView.findViewById(R.id.tv_product_name_onsale_cell);
             price = (TextView) itemView.findViewById(R.id.tv_price_onsale_cell);
-           add=(Button)itemView.findViewById(R.id.btn_add_onsale_cell);
+            add=(Button)itemView.findViewById(R.id.btn_add_onsale_cell);
+            container=(CardView)itemView.findViewById(R.id.card_view_container_onsale_cell);
 
         }
     }
