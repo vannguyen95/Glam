@@ -17,7 +17,6 @@ public interface WooCommerceService {
     @GET("products/{id}")
     Call<ProductResponse> getProductById(@Path("id") int id);
 
-
     @GET("products")
     Call<ProductsResponse> getListProduct();
 

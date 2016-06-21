@@ -28,7 +28,12 @@
         <activity
             android:name=".Activities.ExploreActivity"
             android:label="@string/title_activity_explore"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+
+
+        </activity>
+
         <activity android:name=".Activities.RegisterActivity"></activity>
     </application>
 
