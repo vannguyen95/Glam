@@ -5,17 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--<include-->
-        <!--layout="@layout/app_bar_explore"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
-    
-    <LinearLayout
+      <LinearLayout
         android:id="@+id/content_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -31,7 +26,8 @@
     </LinearLayout>
 
 
-    
+
+
     <android.support.design.widget.NavigationView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/navigation_view"
@@ -43,13 +39,6 @@
 
     </android.support.design.widget.NavigationView>
 
-    <!--<android.support.design.widget.NavigationView-->
-        <!--android:id="@+id/nav_view"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="start"-->
-        <!--android:fitsSystemWindows="true"-->
-        <!--app:headerLayout="@layout/header_drawer_layout"-->
-        <!--app:menu="@menu/activity_explore_drawer" />-->
-
 </android.support.v4.widget.DrawerLayout>
+
+

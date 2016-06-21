@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/img_border">
+    android:background="@drawable/img_border"
+    android:theme="@style/AppTheme">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -74,7 +75,7 @@
 
         <Button
             android:layout_margin="5dp"
-            android:id="@+id/btn_facebook"
+            android:id="@+id/button_facebook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/facebook_icon_color"

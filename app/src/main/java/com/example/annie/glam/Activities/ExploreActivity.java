@@ -1,7 +1,9 @@
 package com.example.annie.glam.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -15,21 +17,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.annie.glam.Adapter.SpinnerAdapter;
 import com.example.annie.glam.Fragments.FragmentCart;
 import com.example.annie.glam.Fragments.FragmentExplore;
 import com.example.annie.glam.Fragments.FragmentFavorite;
-import com.example.annie.glam.Fragments.FragmentLogOut;
+import com.example.annie.glam.Fragments.FragmentSaleOn;
 import com.example.annie.glam.Fragments.FragmentSetting;
 import com.example.annie.glam.R;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class ExploreActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class ExploreActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
     Toolbar toolbar;
     DrawerLayout drawerLayout;
@@ -38,12 +43,16 @@ public class ExploreActivity extends AppCompatActivity
     FragmentManager fragmentManager;
     Spinner spinner;
     SpinnerAdapter spinnerAdapter;
+    TextView tvEmail;
+    Firebase root;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
+        Firebase.setAndroidContext(this);
+        root = new Firebase("https://glam-user.firebaseio.com/");
 
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -53,6 +62,9 @@ public class ExploreActivity extends AppCompatActivity
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
+
+        View header = navigationView.getHeaderView(0);
+        tvEmail = (TextView) header.findViewById(R.id.tv_email);
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -64,12 +76,11 @@ public class ExploreActivity extends AppCompatActivity
         list.add("Popular");
         list.add("Latest");
         list.add("Discount");
-        list.add("On Sale");
+        list.add("OnSale");
         list.add("Upcoming");
 
-        spinnerAdapter = new SpinnerAdapter(getApplicationContext(),list);
+        spinnerAdapter = new SpinnerAdapter(getApplicationContext(), list);
         spinner.setAdapter(spinnerAdapter);
-
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -81,7 +92,30 @@ public class ExploreActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         spinner.setOnItemSelectedListener(this);
 
+
+        //Get the uid for the currently logged in User from intent data passed to this activity
+        String uid = getIntent().getStringExtra("user_id");
+        if (uid != null) {
+            root.child("users").child(uid).child("email").addValueEventListener(new ValueEventListener() {
+                //onDataChange is called every time the name of the User changes in your Firebase Database
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    //Inside onDataChange we can get the data as an Object from the dataSnapshot
+                    //getValue returns an Object. We can specify the type by passing the type expected as a parameter
+                    String data = dataSnapshot.getValue(String.class);
+                    tvEmail.setText(data);
+                }
+
+                //onCancelled is called in case of any error
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+                    Toast.makeText(getApplicationContext(), "" + firebaseError.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -118,37 +152,57 @@ public class ExploreActivity extends AppCompatActivity
                 fragmentTransaction.replace(R.id.content_layout, fragmentExplore);
                 fragmentTransaction.commit();
                 drawerLayout.closeDrawer(GravityCompat.START);
+                getSupportActionBar().show();
                 break;
 
             case R.id.nav_favorite:
                 FragmentTransaction fragmentTransaction1 = fragmentManager.beginTransaction();
                 FragmentFavorite fragmentFavorite = new FragmentFavorite();
                 fragmentTransaction1.replace(R.id.content_layout, fragmentFavorite);
+                fragmentTransaction1.addToBackStack("fragBack");
                 fragmentTransaction1.commit();
                 drawerLayout.closeDrawer(GravityCompat.START);
+                getSupportActionBar().hide();
                 break;
 
             case R.id.nav_cart:
                 FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
                 FragmentCart fragmentCart = new FragmentCart();
                 fragmentTransaction2.replace(R.id.content_layout, fragmentCart);
+                fragmentTransaction2.addToBackStack("fragBack");
                 fragmentTransaction2.commit();
                 drawerLayout.closeDrawer(GravityCompat.START);
+                getSupportActionBar().hide();
                 break;
 
             case R.id.nav_setting:
                 FragmentTransaction fragmentTransaction3 = fragmentManager.beginTransaction();
                 FragmentSetting fragmentSetting = new FragmentSetting();
                 fragmentTransaction3.replace(R.id.content_layout, fragmentSetting);
+                fragmentTransaction3.addToBackStack("fragBack");
                 fragmentTransaction3.commit();
                 drawerLayout.closeDrawer(GravityCompat.START);
+                getSupportActionBar().hide();
+                break;
+
+            case R.id.nav_login:
+                Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+                startActivity(intent);
+//                FragmentTransaction fragmentTransaction4 = fragmentManager.beginTransaction();
+//                FragmentLogIn fragmentLogIn = new FragmentLogIn();
+//                fragmentTransaction4.replace(R.id.content_layout, fragmentLogIn);
+//                fragmentTransaction4.commit();
+                drawerLayout.closeDrawer(GravityCompat.START);
+//                getSupportActionBar().hide();
                 break;
 
             case R.id.nav_logout:
-                FragmentTransaction fragmentTransaction4 = fragmentManager.beginTransaction();
-                FragmentLogOut fragmentLogOut = new FragmentLogOut();
-                fragmentTransaction4.replace(R.id.content_layout, fragmentLogOut);
-                fragmentTransaction4.commit();
+//                FragmentTransaction fragmentTransaction5 = fragmentManager.beginTransaction();
+//                FragmentLogOut fragmentLogOut = new FragmentLogOut();
+//                fragmentTransaction5.replace(R.id.content_layout, fragmentLogOut);
+//                fragmentTransaction5.commit();
+                root.unauth();
+                tvEmail.setText("Email");
                 drawerLayout.closeDrawer(GravityCompat.START);
                 break;
         }
@@ -161,18 +215,44 @@ public class ExploreActivity extends AppCompatActivity
         drawerLayout.openDrawer(GravityCompat.START);
     }
 
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String item = parent.getItemAtPosition(position).toString();
 
-        // Showing selected spinner item
-        Toast.makeText(getApplicationContext(), "Selected  : " + item,
-                Toast.LENGTH_LONG).show();
+        switch (position) {
+            case 3:
+                FragmentTransaction fragmentTransaction4 = fragmentManager.beginTransaction();
+                FragmentSaleOn fragmentSaleOn = new FragmentSaleOn();
+                fragmentTransaction4.replace(R.id.content_layout, fragmentSaleOn);
+                fragmentTransaction4.addToBackStack("fragBack");
+                fragmentTransaction4.commit();
+                getSupportActionBar().hide();
+                break;
+        }
+
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (getSupportFragmentManager().findFragmentByTag("fragBack") != null) {
+
+        } else {
+            super.onBackPressed();
+            getSupportActionBar().show();
+            return;
+        }
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+            Fragment frag = getSupportFragmentManager().findFragmentByTag("fragBack");
+            FragmentTransaction transac = getSupportFragmentManager().beginTransaction().remove(frag);
+            transac.commit();
+
+        }
 
     }
+
 }
