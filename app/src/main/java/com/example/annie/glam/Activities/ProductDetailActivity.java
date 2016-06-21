@@ -23,6 +23,8 @@ import com.example.annie.glam.Service.WooCommerceService;
 import com.example.annie.glam.ServiceGenerator;
 import com.example.annie.glam.ViewPager.CirclePageIndicator;
 
+import org.greenrobot.eventbus.EventBus;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,6 +47,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     int[] imageList = new int[]{R.drawable.slider2, R.drawable.slider2, R.drawable.slider2};
     private CirclePageIndicator mIndicator;
     Toolbar toolbar;
+    FloatingActionButton add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +71,14 @@ public class ProductDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                EventBus.getDefault().post(product);
+
+            }
+        });
 
     }
     @Override
@@ -107,6 +117,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         fabCheckout=(FloatingActionButton)findViewById(R.id.fab_product_detail);
         mIndicator=(CirclePageIndicator)findViewById(R.id.indicator_product_detail);
         toolbar=(Toolbar)findViewById(R.id.toolbar_product_detail);
+        add=(FloatingActionButton) findViewById(R.id.fab_product_detail);
 
     }
 
@@ -138,6 +149,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         tvDescription.setText(product.getShortDescription());
         viewPagerProductDetail.setAdapter(new ImageSliderAdapter(this, imageList));
         mIndicator.setViewPager(viewPagerProductDetail);
+
         //Chua implement may cai button like, chat, more va btn mua
 
 
